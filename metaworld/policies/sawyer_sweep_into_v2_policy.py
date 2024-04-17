@@ -36,7 +36,7 @@ class SawyerSweepIntoV2Policy(Policy):
 
         if np.linalg.norm(pos_curr[:2] - pos_cube[:2]) > 0.04:
             return pos_cube + np.array([0.0, 0.0, 0.3])
-        elif abs(pos_curr[2] - pos_cube[2]) > 0.04:
+        elif abs(pos_curr[2] - pos_cube[2]) > 0.06:
             return pos_cube
         else:
             return pos_goal
