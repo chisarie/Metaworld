@@ -12,7 +12,8 @@ class SawyerDoorOpenV2Policy(Policy):
             "hand_pos": obs[:3],
             "gripper": obs[3],
             "door_pos": obs[4:7],
-            "unused_info": obs[7:],
+            "unused_info": obs[7:-3],
+            "goal_pos": obs[-3:],
         }
 
     def get_action(self, obs):
@@ -32,6 +33,7 @@ class SawyerDoorOpenV2Policy(Policy):
         pos_curr = o_d["hand_pos"]
         pos_door = o_d["door_pos"]
         pos_door[0] -= 0.05
+        pos_goal = o_d["goal_pos"]
 
         # align end effector's Z axis with door handle's Z axis
         if np.linalg.norm(pos_curr[:2] - pos_door[:2]) > 0.12:
@@ -40,5 +42,7 @@ class SawyerDoorOpenV2Policy(Policy):
         elif abs(pos_curr[2] - pos_door[2]) > 0.04:
             return pos_door + np.array([0.06, 0.02, 0.0])
         # push from front edge toward door handle's centroid
-        else:
+        elif np.linalg.norm(pos_goal - pos_door) > 0.10:
             return pos_door
+        else:
+            return pos_goal

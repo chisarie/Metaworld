@@ -12,7 +12,8 @@ class SawyerWindowOpenV2Policy(Policy):
             "hand_pos": obs[:3],
             "unused_gripper_open": obs[3],
             "wndw_pos": obs[4:7],
-            "unused_info": obs[7:],
+            "unused_info": obs[7:-3],
+            "goal_pos": obs[-3:],
         }
 
     def get_action(self, obs):
@@ -31,10 +32,13 @@ class SawyerWindowOpenV2Policy(Policy):
     def _desired_pos(o_d):
         pos_curr = o_d["hand_pos"]
         pos_wndw = o_d["wndw_pos"] + np.array([-0.03, -0.03, -0.08])
+        pos_goal = o_d["goal_pos"]
 
         if np.linalg.norm(pos_curr[:2] - pos_wndw[:2]) > 0.04:
             return pos_wndw + np.array([0.0, 0.0, 0.3])
         elif abs(pos_curr[2] - pos_wndw[2]) > 0.02:
             return pos_wndw
-        else:
+        elif np.linalg.norm(pos_goal[:2] - pos_wndw[:2]) > 0.2:
             return pos_wndw + np.array([0.1, 0.0, 0.0])
+        else:
+            return np.array([pos_goal[0] - 0.02, pos_curr[1], pos_curr[2]])
