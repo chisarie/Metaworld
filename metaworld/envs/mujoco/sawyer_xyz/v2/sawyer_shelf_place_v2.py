@@ -111,6 +111,7 @@ class SawyerShelfPlaceEnvV2(SawyerXYZEnv):
             (base_shelf_pos[:2], [self.obj_init_pos[-1]])
         )
 
+        self._set_pos_site("goal", goal_pos[-3:])
         self.model.body_pos[
             mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_BODY, "shelf")
         ] = base_shelf_pos[-3:]
@@ -119,9 +120,9 @@ class SawyerShelfPlaceEnvV2(SawyerXYZEnv):
             self.model.site_pos[
                 mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_SITE, "goal")
             ]
-            + self.model.body_pos[
-                mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_BODY, "shelf")
-            ]
+            # + self.model.body_pos[
+            #     mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_BODY, "shelf")
+            # ]
         )
 
         self._set_obj_xyz(self.obj_init_pos)
