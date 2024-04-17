@@ -271,6 +271,7 @@ class SawyerXYZEnv(SawyerMocapBase, EzPickle):
 
         _id = mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_SITE, name)
         self.data.site_xpos[_id] = pos[:3]
+        self.model.site_pos[_id] = pos[:3]
 
     @property
     def _target_site_config(self):
